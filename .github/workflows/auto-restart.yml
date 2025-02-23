@@ -1,0 +1,23 @@
+name: Auto Restart Bot
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Stop bot lúc 00:00 UTC (07:00 Việt Nam)
+    - cron: '0 8 * * *'  # Start bot lúc 08:00 UTC (15:00 Việt Nam)
+
+jobs:
+  restart-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Stop Bot (00:00)
+        if: github.event.schedule == '0 0 * * *'
+        run: |
+          curl -X POST -H "Authorization: Bearer 40181496-06bb-48f6-b44c-ad9e7e2b0ecf" \
+          https://backboard.railway.app/v1/services/3b6f0416-c1a8-45a6-bd9e-31162471c47d/stop
+
+      - name: Start Bot (08:00)
+        if: github.event.schedule == '0 8 * * *'
+        run: |
+          curl -X POST -H "Authorization: Bearer 40181496-06bb-48f6-b44c-ad9e7e2b0ecf" \
+          https://backboard.railway.app/v1/services/3b6f0416-c1a8-45a6-bd9e-31162471c47d/start
